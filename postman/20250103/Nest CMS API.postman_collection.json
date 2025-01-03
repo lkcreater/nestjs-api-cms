@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "8dd656e0-8d4c-435c-8710-de7015d5d9fc",
+		"name": "Nest CMS API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12617533"
+	},
+	"item": [
+		{
+			"name": "v1",
+			"item": [
+				{
+					"name": "authentication",
+					"item": [
+						{
+							"name": "New Request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOST}}/api/v1/authentication",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"authentication"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
