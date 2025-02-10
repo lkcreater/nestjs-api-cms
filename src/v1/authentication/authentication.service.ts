@@ -34,7 +34,7 @@ export class AuthenticationService {
     };
 
     try {
-      const url = new URL(`${path}/${pathAuthorize}`);
+      const url = new URL(`${host}${path}/${pathAuthorize}`);
       for (const [key, value] of Object.entries(queryParams)) {
         url.searchParams.set(key, value);
       }
