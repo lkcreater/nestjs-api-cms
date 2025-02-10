@@ -7,7 +7,6 @@ async function bootstrap() {
 
   //-- set global prefix
   app.setGlobalPrefix('api');
-  
 
   //-- setup versioning
   app.enableVersioning({

@@ -1,26 +1,47 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthenticationDto } from './dto/create-authentication.dto';
-import { UpdateAuthenticationDto } from './dto/update-authentication.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthenticationService {
-  create(createAuthenticationDto: CreateAuthenticationDto) {
-    return 'This action adds a new authentication';
+  constructor(private configService: ConfigService) {}
+
+  private getConfigEnvironment() {
+    return {
+      host: this.configService.get<string>('OKTA_HOST'),
+      endpoint: this.configService.get<string>('OKTA_URI_ENDPOINT_OAUTH'),
+      client_id: this.configService.get<string>('OKTA_CLIENT_ID'),
+      redirect_uri: this.configService.get<string>('OKTA_REDIRECT_URI'),
+      response_type: this.configService.get<string>('OKTA_RESPONSE_TYPE'),
+      state: this.configService.get<string>('OKTA_STATE'),
+      nonce: this.configService.get<string>('OKTA_NONCE'),
+      scope: this.configService.get<string>('OKTA_SCOPE'),
+    };
   }
 
-  findAll() {
-    return `This action returns all authentication`;
-  }
+  getUrlOAuth() {
+    const config = this.getConfigEnvironment();
+    const host = config.host;
+    const path = config.endpoint;
+    const pathAuthorize = 'authorize';
 
-  findOne(id: number) {
-    return `This action returns a #${id} authentication`;
-  }
+    const queryParams = {
+      client_id: config.client_id,
+      redirect_uri: config.redirect_uri,
+      response_type: config.response_type,
+      state: config.state,
+      nonce: config.nonce,
+      scope: config.scope,
+    };
 
-  update(id: number, updateAuthenticationDto: UpdateAuthenticationDto) {
-    return `This action updates a #${id} authentication`;
-  }
+    try {
+      const url = new URL(`${host}${path}/${pathAuthorize}`);
+      for (const [key, value] of Object.entries(queryParams)) {
+        url.searchParams.set(key, value);
+      }
 
-  remove(id: number) {
-    return `This action removes a #${id} authentication`;
+      return url.toString();
+    } catch (error) {
+      throw new BadRequestException(`Error OAuth invalid URL authorize`);
+    }
   }
 }
