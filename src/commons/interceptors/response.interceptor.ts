@@ -4,13 +4,33 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
+      catchError((err: any) => {
+        console.log('Handling error locally and rethrowing it...', err);
+
+        let codeError = 30000;
+        if (err?.status) {
+          codeError = Number(err?.status) * 100;
+        }
+
+        return of({
+          meta: {
+            response_code: codeError,
+            response_desc: err?.message ?? 'Server error interpreted',
+            response_datetime: new Date(),
+          },
+        });
+      }),
       map((result) => {
+        if (result?.meta?.response_code) {
+          return result;
+        }
+
         let data = {};
         if (result) {
           data = {
