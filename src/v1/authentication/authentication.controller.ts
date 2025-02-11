@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { EV1Constant } from '../v1.constant';
-import { SignInAuthenticationDto } from './dto/sigin-authentication.dto';
+import { SignInAuthenticationDto } from './dto/signin-authentication.dto';
 
 @Controller({
   version: EV1Constant.version,
@@ -12,7 +12,7 @@ export class AuthenticationController {
 
   @Post('sign-in')
   async signIn(@Body() body: SignInAuthenticationDto) {
-    return body;
+    return this.authenticationService.verifyAuthentication(body);
   }
 
   @Get('url')

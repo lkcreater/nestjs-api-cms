@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SystemUsers } from '../../entities/system-users.entity';
 import { Repository } from 'typeorm';
+import { SignInAuthenticationDto } from './dto/signin-authentication.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -11,7 +12,12 @@ export class AuthenticationService {
     private repoSystemUsers: Repository<SystemUsers>,
   ) {}
 
-  // verifyAuthentication(username: string, password: string) {}
+  verifyAuthentication(body: SignInAuthenticationDto) {
+    return {
+      ...body,
+      hash: bcrypt.hashSync(body?.password, 12),
+    };
+  }
 
   getUrlOAuth() {
     try {
