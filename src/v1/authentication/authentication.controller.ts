@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { EV1Constant } from '../v1.constant';
+import { SignInAuthenticationDto } from './dto/sigin-authentication.dto';
 
 @Controller({
   version: EV1Constant.version,
@@ -8,6 +9,11 @@ import { EV1Constant } from '../v1.constant';
 })
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
+
+  @Post('sign-in')
+  async signIn(@Body() body: SignInAuthenticationDto) {
+    return body;
+  }
 
   @Get('url')
   findAll() {
