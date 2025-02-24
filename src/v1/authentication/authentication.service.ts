@@ -21,7 +21,10 @@ export class AuthenticationService {
 
   getUrlOAuth() {
     try {
-      return '';
+      return {
+        url: 'http://localhost',
+        logger: 'System',
+      };
     } catch (error) {
       throw new BadRequestException(`Error OAuth invalid URL authorize`);
     }

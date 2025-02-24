@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { LoggerService } from './logger.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { SystemLogger } from '../entities/system-logger.entity';
+import { LoggerController } from './logger.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SystemLogger])],
+  controllers: [LoggerController],
   providers: [LoggerService],
   exports: [LoggerService],
 })
